@@ -17,11 +17,11 @@ public class MinesweeperGame {
 		while (true) {
 			System.out.println("   a b c d e f g h i j");
 			showBoard();
-			if (gameStatus == 1) {
+			if (doesUserWinTheGame()) {
 				System.out.println("지뢰를 모두 찾았습니다. GAME CLEAR!");
 				break;
 			}
-			if (gameStatus == -1) {
+			if (doesUserLostTheGame()) {
 				System.out.println("지뢰를 밟았습니다. GAME OVER!");
 				break;
 			}
@@ -52,6 +52,14 @@ public class MinesweeperGame {
 				System.out.println("잘못된 번호를 선택하셨습니다.");
 			}
 		}
+	}
+
+	private static boolean doesUserLostTheGame() {
+		return gameStatus == -1;
+	}
+
+	private static boolean doesUserWinTheGame() {
+		return gameStatus == 1;
 	}
 
 	private static void checkIfGameIsOver() {
