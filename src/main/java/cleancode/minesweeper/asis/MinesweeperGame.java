@@ -5,9 +5,17 @@ import java.util.Scanner;
 
 public class MinesweeperGame {
 
-	private static String[][] board = new String[8][10];
-	private static Integer[][] landMineCounts = new Integer[8][10];
-	private static boolean[][] landMines = new boolean[8][10];
+	private static final int BOARD_ROW_SIZE = 8;
+	public static final int BOARD_COL_SIZE = 10;
+	private static final String[][] BOARD = new String[BOARD_ROW_SIZE][BOARD_COL_SIZE];
+	private static final Integer[][] NEARBY_LAND_MINE_COUNTS = new Integer[BOARD_ROW_SIZE][BOARD_COL_SIZE];
+	private static final boolean[][] LAND_MINES = new boolean[BOARD_ROW_SIZE][BOARD_COL_SIZE];
+	private static final int LAND_MINE_COUNT = 10;
+	public static final String FLAG_SIGN = "⚑";
+	public static final String LAND_MINE_SIGN = "☼";
+	public static final String CLOSED_CELL_SIGN = "□";
+	public static final String OPENED_CELL_SIGN = "■";
+
 	private static int gameStatus = 0; // 0: 게임 중, 1: 승리, -1: 패배
 
 	public static void main(String[] args) {
@@ -33,11 +41,11 @@ public class MinesweeperGame {
 			int selectedRowIndex = getSelectedRowIndex(cellInput);
 
 			if (doesUserChooseToPlantFlag(userAction)) {
-				board[selectedRowIndex][selectedColumnIndex] = "⚑";
+				BOARD[selectedRowIndex][selectedColumnIndex] = FLAG_SIGN;
 				checkIfGameIsOver();
 			} else if (doesUserChooseToOpenCell(userAction)) {
 				if (isLandMineCell(selectedRowIndex, selectedColumnIndex)) {
-					board[selectedRowIndex][selectedColumnIndex] = "☼";
+					BOARD[selectedRowIndex][selectedColumnIndex] = LAND_MINE_SIGN;
 					changeGameStatusToLose();
 					continue;
 				} else {
@@ -64,25 +72,22 @@ public class MinesweeperGame {
 	}
 
 	private static boolean isLandMineCell(int selectedRowIndex, int selectedColumnIndex) {
-		return landMines[selectedRowIndex][selectedColumnIndex];
+		return LAND_MINES[selectedRowIndex][selectedColumnIndex];
 	}
 
 	private static int getSelectedRowIndex(String cellInput) {
 		char cellInputRow = cellInput.charAt(1);
-		int selectedRowIndex = convertRowFrom(cellInputRow);
-		return selectedRowIndex;
+		return convertRowFrom(cellInputRow);
 	}
 
 	private static int getSelectedColumnIndex(String cellInput) {
 		char cellInputCol = cellInput.charAt(0);
-		int selectedColumnIndex = convertColumnFrom(cellInputCol);
-		return selectedColumnIndex;
+		return convertColumnFrom(cellInputCol);
 	}
 
 	private static String getUserActionInputFromUser(Scanner scanner) {
 		System.out.println("선택한 셀에 대한 행위를 선택하세요. (1: 오픈, 2: 깃발 꽂기)");
-		String userAction = scanner.nextLine();
-		return userAction;
+		return scanner.nextLine();
 	}
 
 	private static String getCellInputFromUser(Scanner scanner) {
@@ -107,9 +112,9 @@ public class MinesweeperGame {
 
 	private static boolean isAllCellOpened() {
 		boolean isAllOpened = true;
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 10; col++) {
-				if (board[row][col].equals("□")) {
+		for (int row = 0; row < BOARD_ROW_SIZE; row++) {
+			for (int col = 0; col < BOARD_COL_SIZE; col++) {
+				if (BOARD[row][col].equals(CLOSED_CELL_SIGN)) {
 					isAllOpened = false;
 				}
 			}
@@ -138,10 +143,10 @@ public class MinesweeperGame {
 	}
 
 	private static void showBoard() {
-		for (int row = 0; row < 8; row++) {
+		for (int row = 0; row < BOARD_ROW_SIZE; row++) {
 			System.out.printf("%d  ", row + 1);
-			for (int col = 0; col < 10; col++) {
-				System.out.print(board[row][col] + " ");
+			for (int col = 0; col < BOARD_COL_SIZE; col++) {
+				System.out.print(BOARD[row][col] + " ");
 			}
 			System.out.println();
 		}
@@ -149,18 +154,18 @@ public class MinesweeperGame {
 	}
 
 	private static void initializeGame() {
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 10; col++) {
-				board[row][col] = "□";
+		for (int row = 0; row < BOARD_ROW_SIZE; row++) {
+			for (int col = 0; col < BOARD_ROW_SIZE; col++) {
+				BOARD[row][col] = CLOSED_CELL_SIGN;
 			}
 		}
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < LAND_MINE_COUNT; i++) {
 			int col = new Random().nextInt(10);
 			int row = new Random().nextInt(8);
-			landMines[row][col] = true;
+			LAND_MINES[row][col] = true;
 		}
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 10; col++) {
+		for (int row = 0; row < BOARD_ROW_SIZE; row++) {
+			for (int col = 0; col < BOARD_COL_SIZE; col++) {
 				int count = 0;
 				if (!isLandMineCell(row, col)) {
 					if (row - 1 >= 0 && col - 1 >= 0 && isLandMineCell(row - 1, col - 1)) {
@@ -187,10 +192,10 @@ public class MinesweeperGame {
 					if (row + 1 < 8 && col + 1 < 10 && isLandMineCell(row + 1, col + 1)) {
 						count++;
 					}
-					landMineCounts[row][col] = count;
+					NEARBY_LAND_MINE_COUNTS[row][col] = count;
 					continue;
 				}
-				landMineCounts[row][col] = 0;
+				NEARBY_LAND_MINE_COUNTS[row][col] = 0;
 			}
 		}
 	}
@@ -205,17 +210,17 @@ public class MinesweeperGame {
 		if (row < 0 || row >= 8 || col < 0 || col >= 10) {
 			return;
 		}
-		if (!board[row][col].equals("□")) {
+		if (!BOARD[row][col].equals("□")) {
 			return;
 		}
 		if (isLandMineCell(row, col)) {
 			return;
 		}
-		if (landMineCounts[row][col] != 0) {
-			board[row][col] = String.valueOf(landMineCounts[row][col]);
+		if (NEARBY_LAND_MINE_COUNTS[row][col] != 0) {
+			BOARD[row][col] = String.valueOf(NEARBY_LAND_MINE_COUNTS[row][col]);
 			return;
 		} else {
-			board[row][col] = "■";
+			BOARD[row][col] = OPENED_CELL_SIGN;
 		}
 		open(row - 1, col - 1);
 		open(row - 1, col);
