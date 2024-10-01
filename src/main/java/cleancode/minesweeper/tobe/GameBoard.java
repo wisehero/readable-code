@@ -100,8 +100,7 @@ public class GameBoard {
 				if (count == 0) {
 					continue;
 				}
-				NumberCell numberCell = new NumberCell(count);
-				board[row][col] = numberCell;
+				board[row][col] = new NumberCell(count);
 			}
 		}
 	}
