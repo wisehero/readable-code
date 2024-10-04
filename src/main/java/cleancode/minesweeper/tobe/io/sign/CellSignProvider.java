@@ -2,7 +2,6 @@ package cleancode.minesweeper.tobe.io.sign;
 
 import java.util.Arrays;
 
-import cleancode.minesweeper.tobe.cell.Cell;
 import cleancode.minesweeper.tobe.cell.CellSnapshot;
 import cleancode.minesweeper.tobe.cell.CellSnapshotStatus;
 
