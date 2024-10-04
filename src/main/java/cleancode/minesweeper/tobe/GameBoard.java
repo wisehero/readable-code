@@ -3,8 +3,9 @@ package cleancode.minesweeper.tobe;
 import java.util.List;
 
 import cleancode.minesweeper.tobe.cell.Cell;
-import cleancode.minesweeper.tobe.cell.CellSnapShot;
+import cleancode.minesweeper.tobe.cell.CellSnapshot;
 import cleancode.minesweeper.tobe.cell.Cells;
+import cleancode.minesweeper.tobe.cell.EmptyCell;
 import cleancode.minesweeper.tobe.cell.LandMineCell;
 import cleancode.minesweeper.tobe.cell.NumberCell;
 import cleancode.minesweeper.tobe.gamelevel.GameLevel;
@@ -75,7 +76,7 @@ public class GameBoard {
 		return cellPosition.isRowIndexMoreThanOrEqual(rowSize) || cellPosition.isColIndexMoreThanOrEqual(colSize);
 	}
 
-	public CellSnapShot getSnapShot(CellPosition cellPosition) {
+	public CellSnapshot getSnapShot(CellPosition cellPosition) {
 		return findCell(cellPosition).getSnapShot();
 
 	}
@@ -110,7 +111,7 @@ public class GameBoard {
 	private void initializeEmptyCells(CellPositions cellPositions) {
 		List<CellPosition> allPositions = cellPositions.getPositions();
 		for (CellPosition position : allPositions) {
-			updateCellAt(position, new LandMineCell());
+			updateCellAt(position, new EmptyCell());
 		}
 	}
 

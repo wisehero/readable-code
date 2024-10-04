@@ -2,37 +2,37 @@ package cleancode.minesweeper.tobe.cell;
 
 import java.util.Objects;
 
-public class CellSnapShot {
+public class CellSnapshot {
 
 	private final CellSnapshotStatus status;
 	private final int nearbyLandMineCount;
 
-	public CellSnapShot(CellSnapshotStatus status, int nearbyLandMineCount) {
+	public CellSnapshot(CellSnapshotStatus status, int nearbyLandMineCount) {
 		this.status = status;
 		this.nearbyLandMineCount = nearbyLandMineCount;
 	}
 
-	public static CellSnapShot of(CellSnapshotStatus status, int nearbyLandMineCount) {
-		return new CellSnapShot(status, nearbyLandMineCount);
+	public static CellSnapshot of(CellSnapshotStatus status, int nearbyLandMineCount) {
+		return new CellSnapshot(status, nearbyLandMineCount);
 	}
 
-	public static CellSnapShot ofEmpty() {
+	public static CellSnapshot ofEmpty() {
 		return of(CellSnapshotStatus.EMPTY, 0);
 	}
 
-	public static CellSnapShot ofFlag() {
+	public static CellSnapshot ofFlag() {
 		return of(CellSnapshotStatus.FLAG, 0);
 	}
 
-	public static CellSnapShot ofLandMine() {
+	public static CellSnapshot ofLandMine() {
 		return of(CellSnapshotStatus.LAND_MINE, 0);
 	}
 
-	public static CellSnapShot ofNumber(int nearbyLandMineCount) {
-		return CellSnapShot.of(CellSnapshotStatus.NUMBER, nearbyLandMineCount);
+	public static CellSnapshot ofNumber(int nearbyLandMineCount) {
+		return CellSnapshot.of(CellSnapshotStatus.NUMBER, nearbyLandMineCount);
 	}
 
-	public static CellSnapShot ofUnchecked() {
+	public static CellSnapshot ofUnchecked() {
 		return of(CellSnapshotStatus.UNCHECKED, 0);
 	}
 
@@ -44,6 +44,10 @@ public class CellSnapShot {
 		return nearbyLandMineCount;
 	}
 
+	public boolean isSameStatus(CellSnapshotStatus cellSnapshotStatus) {
+		return this.status == cellSnapshotStatus;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
@@ -51,7 +55,7 @@ public class CellSnapShot {
 		if (o == null || getClass() != o.getClass())
 			return false;
 
-		CellSnapShot snapShot = (CellSnapShot)o;
+		CellSnapshot snapShot = (CellSnapshot)o;
 		return nearbyLandMineCount == snapShot.nearbyLandMineCount && status == snapShot.status;
 	}
 

@@ -5,16 +5,20 @@ import java.util.stream.IntStream;
 
 import cleancode.minesweeper.tobe.GameBoard;
 import cleancode.minesweeper.tobe.GameException;
-import cleancode.minesweeper.tobe.cell.CellSnapShot;
+import cleancode.minesweeper.tobe.cell.CellSnapshot;
 import cleancode.minesweeper.tobe.cell.CellSnapshotStatus;
+import cleancode.minesweeper.tobe.io.sign.CellSignFinder;
+import cleancode.minesweeper.tobe.io.sign.CellSignProvider;
+import cleancode.minesweeper.tobe.io.sign.EmptyCellSignProvider;
+import cleancode.minesweeper.tobe.io.sign.FlagCellSignProvider;
+import cleancode.minesweeper.tobe.io.sign.LandMineCellSignProvider;
+import cleancode.minesweeper.tobe.io.sign.NumberCellSignProvider;
+import cleancode.minesweeper.tobe.io.sign.UncheckedCellSignProvider;
 import cleancode.minesweeper.tobe.position.CellPosition;
 
 public class ConsoleOutputHandler implements OutputHandler {
 
-	private static final String EMPTY_SIGN = "■";
-	private static final String LAND_MINE_SIGN = "☼";
-	private static final String FLAG_SIGN = "⚑";
-	private static final String UNCHECKED_SIGN = "□";
+	private final CellSignFinder cellSignFinder = new CellSignFinder();
 
 	@Override
 	public void showGameStartComments() {
@@ -34,9 +38,8 @@ public class ConsoleOutputHandler implements OutputHandler {
 			for (int col = 0; col < board.getColSize(); col++) {
 				CellPosition cellPosition = CellPosition.of(row, col);
 
-				CellSnapShot snapShot = board.getSnapShot(cellPosition);
-				String cellSign = decideCellSignFrom(snapShot);
-
+				CellSnapshot snapshot = board.getSnapShot(cellPosition);
+				String cellSign = CellSignProvider.findCellSignFrom(snapshot);
 				System.out.print(cellSign + " ");
 			}
 			System.out.println();
@@ -44,26 +47,26 @@ public class ConsoleOutputHandler implements OutputHandler {
 		System.out.println();
 	}
 
-	private String decideCellSignFrom(CellSnapShot snapShot) {
+	private String decideCellSignFrom(CellSnapshot snapShot) {
 		CellSnapshotStatus status = snapShot.getStatus();
 		if (status == CellSnapshotStatus.EMPTY) {
-			return EMPTY_SIGN;
+			return new EmptyCellSignProvider().provide(snapShot);
 		}
 
 		if (status == CellSnapshotStatus.LAND_MINE) {
-			return LAND_MINE_SIGN;
+			return new LandMineCellSignProvider().provide(snapShot);
 		}
 
 		if (status == CellSnapshotStatus.FLAG) {
-			return FLAG_SIGN;
+			return new FlagCellSignProvider().provide(snapShot);
 		}
 
 		if (status == CellSnapshotStatus.NUMBER) {
-			return String.valueOf(snapShot.getNearbyLandMineCount());
+			return new NumberCellSignProvider().provide(snapShot);
 		}
 
 		if (status == CellSnapshotStatus.UNCHECKED) {
-			return UNCHECKED_SIGN;
+			return new UncheckedCellSignProvider().provide(snapShot);
 		}
 		throw new IllegalArgumentException("확인할 수 없는 셀입니다.");
 	}

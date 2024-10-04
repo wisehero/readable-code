@@ -15,15 +15,15 @@ public class EmptyCell implements Cell {
 	}
 
 	@Override
-	public CellSnapShot getSnapShot() {
+	public CellSnapshot getSnapShot() {
 		if (cellState.isOpened()) {
-			return CellSnapShot.ofEmpty();
+			return CellSnapshot.ofEmpty();
 		}
 
 		if (cellState.isFlagged()) {
-			return CellSnapShot.ofFlag();
+			return CellSnapshot.ofFlag();
 		}
-		return CellSnapShot.ofUnchecked();
+		return CellSnapshot.ofUnchecked();
 	}
 
 	@Override
