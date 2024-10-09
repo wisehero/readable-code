@@ -8,8 +8,8 @@ import java.util.List;
 
 import cleancode.studycafe.tobe.model.locker.StudyCafeLockerPass;
 import cleancode.studycafe.tobe.model.locker.StudyCafeLockerPasses;
-import cleancode.studycafe.tobe.model.pass.StudyCafeSeatPass;
 import cleancode.studycafe.tobe.model.pass.StudyCafePassType;
+import cleancode.studycafe.tobe.model.pass.StudyCafeSeatPass;
 import cleancode.studycafe.tobe.model.pass.StudyCafeSeatPasses;
 
 public class StudyCafeFileHandler {

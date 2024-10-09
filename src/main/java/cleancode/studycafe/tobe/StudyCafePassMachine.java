@@ -9,6 +9,8 @@ import cleancode.studycafe.tobe.model.order.StudyCafePassOrder;
 import cleancode.studycafe.tobe.model.pass.StudyCafeSeatPass;
 import cleancode.studycafe.tobe.model.pass.StudyCafePassType;
 import cleancode.studycafe.tobe.model.pass.StudyCafeSeatPasses;
+import cleancode.studycafe.tobe.provider.LockerPassProvider;
+import cleancode.studycafe.tobe.provider.SeatPassProvider;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +19,13 @@ public class StudyCafePassMachine {
 
 	private final StudyCafeIOHandler ioHandler = new StudyCafeIOHandler();
 	private final StudyCafeFileHandler studyCafeFileHandler = new StudyCafeFileHandler();
+	private final SeatPassProvider seatPassProvider;
+	private final LockerPassProvider lockerPassProvider;
+
+	public StudyCafePassMachine(SeatPassProvider seatPassProvider, LockerPassProvider lockerPassProvider) {
+		this.seatPassProvider = seatPassProvider;
+		this.lockerPassProvider = lockerPassProvider;
+	}
 
 	public void run() {
 		try {
