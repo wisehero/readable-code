@@ -25,7 +25,8 @@ public class StudyCafePassOrder {
 
 	public int getTotalPrice() {
 		int lockerPassPrice = lockerPass == null ? 0 : lockerPass.getPrice();
-		return seatPass.getPrice() + lockerPassPrice;
+		int totalPassPrice = seatPass.getPrice() + lockerPassPrice;
+		return totalPassPrice + getDiscountPrice();
 	}
 
 	public StudyCafeSeatPass getSeatPass() {

@@ -18,7 +18,6 @@ import java.util.Optional;
 public class StudyCafePassMachine {
 
 	private final StudyCafeIOHandler ioHandler = new StudyCafeIOHandler();
-	private final StudyCafeFileHandler studyCafeFileHandler = new StudyCafeFileHandler();
 	private final SeatPassProvider seatPassProvider;
 	private final LockerPassProvider lockerPassProvider;
 
@@ -31,8 +30,6 @@ public class StudyCafePassMachine {
 		try {
 			ioHandler.showWelcomeMessage();
 			ioHandler.showAnnouncement();
-
-			ioHandler.askPassTypeSelection();
 
 			// 이용권을 어떤 것을 선택할 지에 대해 입력을 받기
 			StudyCafeSeatPass selectedPass = selectPass();
@@ -58,7 +55,7 @@ public class StudyCafePassMachine {
 	}
 
 	private List<StudyCafeSeatPass> findPassCandidatesBy(StudyCafePassType studyCafePassType) {
-		StudyCafeSeatPasses allPasses = studyCafeFileHandler.readStudyCafePasses();
+		StudyCafeSeatPasses allPasses = seatPassProvider.getSeatPasses();
 
 		return allPasses.findPassBy(studyCafePassType);
 	}
@@ -83,7 +80,7 @@ public class StudyCafePassMachine {
 	}
 
 	private Optional<StudyCafeLockerPass> findLockerPassCandidateBy(StudyCafeSeatPass selectedPass) {
-		StudyCafeLockerPasses allPasses = studyCafeFileHandler.readLockerPasses();
+		StudyCafeLockerPasses allPasses = lockerPassProvider.getLockerPasses();
 
 		return allPasses.findLockerPassBy(selectedPass);
 	}
